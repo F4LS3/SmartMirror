@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Baloo Tamma 2', cursive;
+}
+
+body, html {
+    background: #222;
+}
+
+.speech-input-text {
+    color: #FFF;
+}
+
+.speech-output-text {
+    color: #FFF;
+}
+
+.widget {
+    position: absolute;
+    right: 0px;
+}
+
+.card {
+    height: 92px;
+    width: 425px;
+    position: relative;
+    background-color: #E5896A;
+    border-radius: 18px;
+    padding: 10px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: right;
+}
+
+.card {
+    background-image: url('widgets/sunny-widget-background.svg');
+}
+
+.card ul>li {
+    font-size: 24px;
+    color: #FFF;
+}
+
+.card ul>li img {
+    width: 30px;
+}
+
+.card h1 {
+    color: #FFF;
+    position: absolute;
+    left: 10px;
+    bottom: 0px;
+}
+
+.card h2 {
+    color: #FFF;
+    position: absolute;
+    left: 15px;
+    bottom: 0px;
+    font-size: large;
+    font-weight: lighter;
+}
+
+.card .date {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    text-align: right;
+    color: #FFF;
+}
+
+.card .city {
+    position: absolute;
+    font-size: 18px;
+    right: 10px;
+    bottom: 0px;
+    color: #FFF;
+}
+
+.list-inline {
+    margin-bottom: 0 !important;
+}
+
+h3, h2 {
+    margin: 0 !important;
+}

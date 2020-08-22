@@ -21,12 +21,11 @@ app.post('/request', async (req, res) => {
     if(method == "api-call") {
         if(response == "weather") {
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${content[0]}&lon=${content[1]}&appid=${config.weatherAPIKey}&units=metric&lang=de`;
-            console.log(url);
             axios({
                 url: url,
                 responseType: 'json'
             }).then(data => {
-                console.log(data.data);
+                console.log(`[INFO] Sent Weather-Info to Mirror-Client`);
                 res.status(200).send(data.data);
             });
         }

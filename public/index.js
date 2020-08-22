@@ -14,8 +14,8 @@ try {
     grammerList.addFromString('#JSGF V1.0;', 1);
     recognition.grammers = grammerList;
     recognition.lang = 'de-DE';
-    recognition.interimResults = false;
-    //recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.continuous = true;
 
     recognition.onresult = (event) => {
         const current = event.resultIndex;
@@ -23,25 +23,7 @@ try {
 
         if (transcript.toLowerCase().indexOf(hotword) != -1) {
             const prettyTranscript = transcript.replace("hey Spiegel", perttyHotword);
-            speechInputText.textContent = prettyTranscript;
-
-            fetch('/request', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    method: 'voice',
-                    response: 'answer',
-                    content: transcript.toLowerCase()
-                })
-            }).then(res => {
-                return res.json();
-
-            }).then(json => {
-                console.log(json);
-            });
+            speechInputText.textContent += prettyTranscript;
         }
     };
 
@@ -73,14 +55,11 @@ try {
                         content: [position.coords.latitude, position.coords.longitude]
                     })
                 }).then(res => res.json()).then(json => {
-                    console.log(json);
                     setWeather(json);
                 });
-
-                console.log([position.coords.latitude, position.coords.longitude]);
             }, e => {
                 console.error(`[ERROR] Error while retriving geolocation: ${e}`);
-            }, {maximumAge: 10000, timeout: 10000, enableHighAccuracy: true});
+            }, { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
 
         } else {
             console.error(`[ERROR] The browser doesn't support geolocation!`);
@@ -92,6 +71,71 @@ try {
     console.error(e);
 }
 
-function setWeather(data) {
+const temperatureElement = document.querySelector("#temp");
+const statusElement = document.querySelector("#status");
+const cityElement = document.querySelector("#city");
+const dateElement = document.querySelector("#date");
+const timeElement = document.querySelector("#time");
 
+function setWeather(data) {
+    temperatureElement.textContent = `${Math.round(data.main.temp)}°C`;
+    statusElement.textContent = data.weather.description;
+    cityElement.textContent = data.name;
+    dateElement.textContent = getDate();
+    timeElement.textContent = msToTime(Date.now());
+}
+
+function msToTime(ms) {
+    var date = new Date(ms);
+
+    var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+    var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+
+    return `${hours}:${minutes}`;
+}
+
+function getDate() {
+    var date = new Date();
+
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0');
+    var yyyy = date.getFullYear();
+
+    date = `${getDay(date.getDay())} ${dd}.${mm}.${yyyy}`;
+    return date;
+}
+
+function getDay(num) {
+    let day;
+    switch (num) {
+        case 2:
+            day = "Tue";
+            break;
+
+        case 3:
+            day = "Wed";
+            break;
+
+        case 4:
+            day = "Thu";
+            break;
+
+        case 5:
+            day = "Fri";
+            break;
+        
+        case 6:
+            day = "Sat";
+            break;
+
+        case 7:
+            day = "Sun";
+            break;
+
+        default:
+            day = "Mon";
+            break;
+    }
+
+    return day;
 }
