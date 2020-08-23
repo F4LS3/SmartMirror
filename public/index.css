@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Baloo Tamma 2', cursive;
+    font-family: 'Lato', cursive;
 }
 
 body, html {
@@ -19,70 +19,85 @@ body, html {
 
 .widget {
     position: absolute;
-    right: 0px;
-}
-
-.card {
     height: 92px;
     width: 425px;
-    position: relative;
     background-color: #E5896A;
     border-radius: 18px;
     padding: 10px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position-x: right;
-}
-
-.card {
     background-image: url('widgets/sunny-widget-background.svg');
 }
 
-.card ul>li {
+.widget * {
+    font-family: 'Lato', sans-serif;
+}
+
+.widget ul>li {
     font-size: 24px;
     color: #FFF;
 }
 
-.card ul>li img {
+.widget ul>li img {
     width: 30px;
 }
 
-.card h1 {
+.widget h1 {
     color: #FFF;
     position: absolute;
+    font-size: 48px;
     left: 10px;
     bottom: 0px;
 }
 
-.card h2 {
-    color: #FFF;
-    position: absolute;
-    left: 15px;
-    bottom: 0px;
-    font-size: large;
-    font-weight: lighter;
-}
-
-.card .date {
+.widget .date-container {
     position: absolute;
     right: 10px;
     top: 10px;
+    font-weight: 400;
     text-align: right;
     color: #FFF;
 }
 
-.card .city {
+.widget .city {
     position: absolute;
     font-size: 18px;
+    font-weight: lighter;
     right: 10px;
-    bottom: 0px;
+    bottom: 5px;
     color: #FFF;
 }
 
 .list-inline {
-    margin-bottom: 0 !important;
+    list-style: none;
+}
+
+.list-inline li {
+    vertical-align: text-top;
+    display: inline-block;
 }
 
 h3, h2 {
     margin: 0 !important;
+}
+
+.date-time {
+    position: absolute;
+    text-align: center;
+    color: #FFF;
+    top: 20px;
+    left: 40px;
+}
+
+#main-clock {
+    font-weight: 350;
+    font-size: 72px;
+}
+
+#main-date {
+    color: #FFF;
+    font-size: 30px;
+    font-weight: 300;
+    bottom: 0px;
 }

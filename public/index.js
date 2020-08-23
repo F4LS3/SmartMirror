@@ -28,7 +28,7 @@ try {
     };
 
     recognition.onerror = (event) => {
-        speechOutputText.textContent = "Das habe ich leider nicht verstanden!";
+        if (event.error == "no-speech") return;
         console.error(`[ERROR] Error while recognition: ${event.error}`);
     };
 
@@ -41,101 +41,44 @@ try {
     };
 
     window.onload = async () => {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(position => {
-                fetch('/request', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        method: 'api-call',
-                        response: 'weather',
-                        content: [position.coords.latitude, position.coords.longitude]
-                    })
-                }).then(res => res.json()).then(json => {
-                    setWeather(json);
-                });
-            }, e => {
-                console.error(`[ERROR] Error while retriving geolocation: ${e}`);
-            }, { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
+        const position = await geolocate();
+        const json = await request('api-call', 'weather', [position.latitude, position.longitude]);
 
+        setWeather(json);
+        startTime();
+        recognition.start();
+    };
+
+    function geolocate() {
+        if ('geolocation' in navigator) {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(position => {
+                    resolve(position.coords);
+                }, e => console.error(`[ERROR] Error while retriving geolocation: ${e}`), { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
+            });
         } else {
             console.error(`[ERROR] The browser doesn't support geolocation!`);
         }
-
-        recognition.start();
-    };
-} catch (e) {
-    console.error(e);
-}
-
-const temperatureElement = document.querySelector("#temp");
-const statusElement = document.querySelector("#status");
-const cityElement = document.querySelector("#city");
-const dateElement = document.querySelector("#date");
-const timeElement = document.querySelector("#time");
-
-function setWeather(data) {
-    temperatureElement.textContent = `${Math.round(data.main.temp)}°C`;
-    statusElement.textContent = data.weather.description;
-    cityElement.textContent = data.name;
-    dateElement.textContent = getDate();
-    timeElement.textContent = msToTime(Date.now());
-}
-
-function msToTime(ms) {
-    var date = new Date(ms);
-
-    var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
-    var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
-
-    return `${hours}:${minutes}`;
-}
-
-function getDate() {
-    var date = new Date();
-
-    var dd = String(date.getDate()).padStart(2, '0');
-    var mm = String(date.getMonth() + 1).padStart(2, '0');
-    var yyyy = date.getFullYear();
-
-    date = `${getDay(date.getDay())} ${dd}.${mm}.${yyyy}`;
-    return date;
-}
-
-function getDay(num) {
-    let day;
-    switch (num) {
-        case 2:
-            day = "Tue";
-            break;
-
-        case 3:
-            day = "Wed";
-            break;
-
-        case 4:
-            day = "Thu";
-            break;
-
-        case 5:
-            day = "Fri";
-            break;
-        
-        case 6:
-            day = "Sat";
-            break;
-
-        case 7:
-            day = "Sun";
-            break;
-
-        default:
-            day = "Mon";
-            break;
     }
 
-    return day;
+    function request(method, response, content) {
+        return new Promise(async (resolve, reject) => {
+            const res = await fetch('/request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    method: method,
+                    response: response,
+                    content: content
+                })
+            });
+
+            resolve(res.json());
+        });
+    }
+} catch (e) {
+    console.error(e);
 }
