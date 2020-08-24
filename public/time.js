@@ -31,51 +31,51 @@ function getMonth(num) {
     let month;
 
     switch (num) {
-        case 1:
+        case 0:
             month = "Januar";
             break;
 
-        case 2:
+        case 1:
             month = "Februar";
             break;
 
-        case 3:
+        case 2:
             month = "März";
             break;
 
-        case 4:
+        case 3:
             month = "April";
             break;
 
-        case 5:
+        case 4:
             month = "Mai";
             break;
 
-        case 6:
+        case 5:
             month = "Juni";
             break;
 
-        case 7:
+        case 6:
             month = "Juli";
             break;
 
-        case 8:
+        case 7:
             month = "August";
             break;
 
-        case 9:
+        case 8:
             month = "September";
             break;
 
-        case 10:
+        case 9:
             month = "Oktober";
             break;
 
-        case 11:
+        case 10:
             month = "November";
             break;
 
-        case 12:
+        case 11:
             month = "Dezember";
             break;
     }
@@ -119,7 +119,7 @@ function getDay(num) {
 }
 
 function isNight() {
-    let hours = new Date(Date.now()).getHours();
+    const hours = new Date(Date.now()).getHours();
     return hours > 18 || hours <= 4;
 }
 
@@ -132,6 +132,7 @@ function startTime() {
     setTimeout(startTime, 500);
 }
 
-document.querySelectorAll(".date").forEach(element => {
-    element.textContent = getDate();
-});
+function startDate() {
+    document.querySelector("#main-date").textContent = getDate();
+    setTimeout(startDate, 500);
+}

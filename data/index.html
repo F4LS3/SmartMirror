@@ -5,40 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Mirror</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="public/index.css">
+    <link rel="stylesheet" href="public/widgets.css">
+
     <script src="public/index.js" defer></script>
+    <script src="public/weather.js" defer></script>
+    <script src="public/time.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="container widget">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <ul class="list-inline">
-                            <li><img src="public/icons/sun.svg" alt="Sun Icon"></li>
-                            <li>Sunny</li>
-                        </ul>
+        <div class="date-time">
+            <div class="clock time" id="main-clock"></div>
+            <div class="date" id="main-date"></div>
+        </div>
 
-                        <h1 id="temp">TBD</h1>
-                        <h2 id="status">TBD</h2>
-                        <div class="date">
-                            <h3 id="time">Time</h3>
-                            <p id="date">Date</p>
-                        </div>
-                        <p class="city" id="city">City</p>
-                    </div>
-                </div>
+        <div class="widget" id="weather-widget">
+            <ul class="list-inline">
+                <li><img src="public/icons/sun.svg" alt="Sun Icon"></li>
+                <li>
+                    <p>Sonnig</p>
+                </li>
+            </ul>
+
+            <h1 id="temp">TBD</h1>
+            <div class="date-container">
+                <h3 class="time" id="time">Time</h3>
+                <p id="date">Date</p>
             </div>
+            <p class="city" id="city">City</p>
         </div>
     </header>
 
     <main>
-
+        <div class="display"></div>
     </main>
 
     <footer>

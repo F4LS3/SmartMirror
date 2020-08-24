@@ -46,6 +46,7 @@ try {
 
         setWeather(json);
         startTime();
+        startDate();
         recognition.start();
     };
 
