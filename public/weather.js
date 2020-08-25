@@ -3,7 +3,11 @@ const cityElement = document.querySelector("#city");
 const dateElement = document.querySelector("#date");
 const timeElement = document.querySelector("#time");
 
+let weatherData = {};
+
 function setWeather(data) {
+    weatherData = data;
+
     temperatureElement.textContent = `${Math.round(data.main.temp)}°C`;
     cityElement.textContent = data.name;
     dateElement.textContent = getDate();
@@ -11,5 +15,6 @@ function setWeather(data) {
 }
 
 function addWidget() {
-    
+    if(!isNight()) {
+    }
 }

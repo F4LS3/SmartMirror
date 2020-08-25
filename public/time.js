@@ -18,10 +18,10 @@ function msToTimeWithSeconds(ms) {
 }
 
 function getDate() {
-    var date = new Date();
+    let date = new Date();
 
-    var dd = String(date.getDate()).padStart(2, '0');
-    var yyyy = date.getFullYear();
+    let dd = String(date.getDate()).padStart(2, '0');
+    let yyyy = date.getFullYear();
 
     date = `${getDay(date.getDay())}, ${dd}. ${getMonth(date.getMonth())} ${yyyy}`;
     return date;

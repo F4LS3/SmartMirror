@@ -1,3 +1,7 @@
+gapi.load('auth2', () => {
+    console.log("Loaded GoogleAuthAPI successfully");
+});
+
 try {
     const hotword = "hey spiegel";
     const perttyHotword = "Hey Spiegel";
@@ -44,6 +48,8 @@ try {
         const position = await geolocate();
         const json = await request('api-call', 'weather', [position.latitude, position.longitude]);
 
+        const googlePosition = await asyncFetch("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDITWJfil2FZOoj8ODlnv3YgNWJj5Utp3Y", 'POST');
+
         setWeather(json);
         startTime();
         startDate();
@@ -55,7 +61,7 @@ try {
             return new Promise((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(position => {
                     resolve(position.coords);
-                }, e => console.error(`[ERROR] Error while retriving geolocation: ${e}`), { maximumAge: 10000, timeout: 5000, enableHighAccuracy: true });
+                }, e => console.error(`[ERROR] Error while retriving geolocation: ${e}`)/*, { enableHighAccuracy: true }*/);
             });
         } else {
             console.error(`[ERROR] The browser doesn't support geolocation!`);
@@ -79,6 +85,27 @@ try {
 
             resolve(res.json());
         });
+    }
+
+    async function asyncFetch(url = '/request', method = 'GET', body = {}) {
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const response = new Promise(async (resolve, reject) => {
+            const options = {
+                method: method
+            };
+
+            if(method != 'GET') options.body = JSON.stringify(body);
+
+            const response = await fetch(url, options);
+            resolve(response.json());
+        });
+
+        return response;
+    }
+
+    function googleFetch(url, params) {
+        const response = gapi.client.request({ 'path': url, 'params': params });
+        return response;
     }
 } catch (e) {
     console.error(e);

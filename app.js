@@ -1,11 +1,21 @@
 const express = require("express");
 const app = express();
+const morgan = require("morgan");
+const helmet = require("helmet");
+const cors = require("cors");
 const axios = require("axios");
+const fs = require("fs");
 
-const config = require('./config.json');
+//JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+const config = require("./config.json");
 
 console.clear();
 
+process.env.GOOGLE_API_KEY = config.GoogleAPIKeys.GeolocationAPI;
+
+app.use(helmet());
+app.use(morgan('tiny'));
+app.use(cors());
 app.use(express.json());
 app.use('/public', express.static(`public`));
 
@@ -20,18 +30,30 @@ app.post('/request', async (req, res) => {
     
     if(method == "api-call") {
         if(response == "weather") {
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${content[0]}&lon=${content[1]}&appid=${config.weatherAPIKey}&units=metric&lang=de`;
-            axios({
-                url: url,
-                responseType: 'json'
-            }).then(data => {
-                console.log(`[INFO] Sent Weather-Info to Mirror-Client`);
-                res.status(200).send(data.data);
-            });
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${content[0]}&lon=${content[1]}&appid=${config.WeatherAPIKey}&units=metric&lang=de`;
+            const data = await axios({ url: url, responseType: 'json' });
+            res.status(200).send(data.data)
         }
     }
 });
 
-app.listen(8080, () => {
+app.get('/key', async (req, res) => {
+    const requested = req.url.replace("/key?", "");
+    let key = "unavailable";
+
+    switch (requested) {
+        case 'geolocation':
+            key = config.GoogleAPIKeys.GeolocationAPI;
+            break;
+
+        case 'calendar':
+            key = config.GoogleAPIKeys.CalendarAPI;
+            break;
+    }
+
+    res.status(200).json({ key: key });
+});
+
+app.listen(80, () => {
     console.log(`[INFO] SmartMirror listening on port 8080`);
 });
